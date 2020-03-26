@@ -1,2 +1,2 @@
-# PlayEFCore
-Playing around with EFCore
+# PlayDotNetCore
+Playing around with .NET Core
