@@ -7,11 +7,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notes.Api", "src\Notes.Api\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notes.WebUI", "src\Notes.WebUI\Notes.WebUI.csproj", "{38A1D58E-6946-4ED4-9666-321B49FA9435}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notes.Infrastructure", "src\Notes.Infrastructure\Notes.Infrastructure.csproj", "{2C14076B-F86B-4884-815E-1709159AE3AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notes.Infrastructure", "src\Notes.Infrastructure\Notes.Infrastructure.csproj", "{2C14076B-F86B-4884-815E-1709159AE3AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notes.Application", "src\Notes.Application\Notes.Application.csproj", "{39EEEB2F-ECBD-4301-A15E-895766146599}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notes.Application", "src\Notes.Application\Notes.Application.csproj", "{39EEEB2F-ECBD-4301-A15E-895766146599}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notes.Domain", "src\Notes.Domain\Notes.Domain.csproj", "{F96349C0-00DE-4C05-B458-1870048358C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notes.Domain", "src\Notes.Domain\Notes.Domain.csproj", "{F96349C0-00DE-4C05-B458-1870048358C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7C1479FA-8E14-4108-BDEF-E3FF2600FC96}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
