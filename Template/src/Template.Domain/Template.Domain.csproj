@@ -10,7 +10,6 @@
     <Folder Include="Events\" />
     <Folder Include="Enums\" />
     <Folder Include="Entities\" />
-    <Folder Include="Common\" />
   </ItemGroup>
 
 </Project>
