@@ -47,10 +47,10 @@ namespace Template.Application.Common.Behaviours
             if (elapsedMilliseconds > 500)
             {
                 var requestName = typeof(TRequest).Name;
-                var userId = _currentUserService.UserId;
+                var userId = _currentUserService.UserId ?? String.Empty;
                 var userName = string.Empty;
 
-                if (userId != Guid.Empty)
+                if (!String.IsNullOrWhiteSpace(userId))
                 {
                     userName = await _identityService.GetUserNameAsync(userId);
                 }

@@ -30,10 +30,10 @@ namespace Template.Application.Common.Behaviours
         public async Task Process(TRequest request, CancellationToken cancellationToken)
         {
             var requestName = typeof(TRequest).Name;
-            var userId = _currentUserService.UserId;
-            string userName = string.Empty;
+            var userId = _currentUserService.UserId ?? String.Empty;
+            string userName = String.Empty;
 
-            if (userId != Guid.Empty)
+            if (!String.IsNullOrWhiteSpace(userId))
             {
                 userName = await _identityService.GetUserNameAsync(userId);
             }

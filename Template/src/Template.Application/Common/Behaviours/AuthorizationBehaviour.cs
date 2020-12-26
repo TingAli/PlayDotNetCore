@@ -34,7 +34,7 @@ namespace Template.Application.Common.Behaviours
 
             if (authorizeAttributes.Any())
             {
-                if (_currentUserService.UserId == Guid.Empty)
+                if (String.IsNullOrWhiteSpace(_currentUserService.UserId))
                 {
                     throw new UnauthorizedAccessException();
                 }
