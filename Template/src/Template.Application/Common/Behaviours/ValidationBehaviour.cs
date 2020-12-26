@@ -18,7 +18,7 @@ namespace Template.Application.Common.Behaviours
 
         public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators)
         {
-            _validators = validators;
+            _validators = validators ?? throw new System.ArgumentNullException(nameof(validators));
         }
 
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)

@@ -26,9 +26,9 @@ namespace Template.Application.Common.Behaviours
         {
             _timer = new Stopwatch();
 
-            _logger = logger;
-            _currentUserService = currentUserService;
-            _identityService = identityService;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _currentUserService = currentUserService ?? throw new ArgumentNullException(nameof(currentUserService));
+            _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
         public async Task<TResponse> Handle(
