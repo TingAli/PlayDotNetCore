@@ -1,52 +1,124 @@
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+
+using Template.Application;
+using Template.Application.Common.Interfaces;
+using Template.Infrastructure;
+using Template.Infrastructure.Persistence;
+using Template.Api.Services;
+using NSwag;
+using Template.Api.Filters;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Builder;
+using NSwag.Generation.Processors.Security;
+using System.Linq;
+using System;
+using Microsoft.AspNetCore.Mvc.Versioning;
 
 namespace Template.Api
 {
     public class Startup
-	{
-		public Startup(IConfiguration configuration)
-		{
-			Configuration = configuration;
-		}
+    {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
-		public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
-		public void ConfigureServices(IServiceCollection services)
-		{
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.Configure<ApiBehaviorOptions>(c =>
+            {
+                c.SuppressModelStateInvalidFilter = true;
+            });
 
-			services.AddControllers();
-			services.AddSwaggerGen(c =>
-			{
-				c.SwaggerDoc("v1", new OpenApiInfo { Title = "Template.Api", Version = "v1" });
-			});
-		}
+            //services.AddApplication();
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-		{
-			if (env.IsDevelopment())
-			{
-				app.UseDeveloperExceptionPage();
-				app.UseSwagger();
-				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Template.Api v1"));
-			}
+            //services.AddInfrastructure(Configuration);
 
-			app.UseHttpsRedirection();
+            //services.AddDatabaseDeveloperPageExceptionFilter();
 
-			app.UseRouting();
+            //services.AddSingleton<ICurrentUserService, CurrentUserService>();
 
-			app.UseAuthorization();
+            //services.AddHttpContextAccessor();
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllers();
-			});
-		}
-	}
+            //services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddHealthChecks();
+            //services.AddHealthChecks()
+            //        .AddDbContextCheck<ApplicationDbContext>();
+
+            services.AddControllers(options =>
+                options.Filters.Add<ApiExceptionFilterAttribute>())
+                    .AddFluentValidation();
+
+            services.AddApiVersioning(c =>
+            {
+                c.DefaultApiVersion = new ApiVersion(1, 0);
+                c.ApiVersionReader = new HeaderApiVersionReader("api-version");
+                c.AssumeDefaultVersionWhenUnspecified = true;
+                c.ReportApiVersions = true;
+            });
+
+            services.AddOpenApiDocument(configure =>
+            {
+                configure.Title = "Template.Api";
+                configure.Version = "v1";
+                configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme {
+                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    Name = "Authorization",
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                    Description = "Type into the textbox: Bearer {your JWT token}."
+                });
+
+                configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+            });
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+
+                app.UseOpenApi();
+
+                app.UseSwaggerUi3(settings =>
+                {
+                    settings.DocumentTitle = "Template.Api v1";
+                });
+
+                app.UseDeveloperExceptionPage();
+
+                app.UseMigrationsEndPoint();
+            }
+
+            app.UseHealthChecks("/health");
+
+            app.UseHttpsRedirection();
+
+            app.UseExceptionHandler("/Error");
+
+            app.UseHsts();
+
+            app.UseRouting();
+
+            app.UseAuthentication();
+
+            //app.UseIdentityServer();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
+    }
 }

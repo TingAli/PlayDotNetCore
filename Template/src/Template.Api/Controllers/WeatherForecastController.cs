@@ -7,10 +7,8 @@ using System.Linq;
 
 namespace Template.Api.Controllers
 {
-    [ApiController]
-	[Route("[controller]")]
-	public class WeatherForecastController : ControllerBase
-	{
+	public class WeatherForecastController : ApiControllerBase
+    {
 		private static readonly string[] Summaries = new[]
 		{
 			"Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -20,7 +18,7 @@ namespace Template.Api.Controllers
 
 		public WeatherForecastController(ILogger<WeatherForecastController> logger)
 		{
-			_logger = logger;
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		[HttpGet]
