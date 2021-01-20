@@ -27,6 +27,8 @@ namespace Template.Api
             Configuration = configuration;
         }
 
+        private readonly string AllowedOriginsCorsPolicy = "_allowedOriginsCorsPolicy";
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -35,6 +37,15 @@ namespace Template.Api
             services.Configure<ApiBehaviorOptions>(c =>
             {
                 c.SuppressModelStateInvalidFilter = true;
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: AllowedOriginsCorsPolicy,
+                    builder =>
+                    {
+                        builder.WithOrigins("https://localhost:44316");
+                    });
             });
 
             //services.AddApplication();
@@ -97,6 +108,8 @@ namespace Template.Api
                 app.UseDeveloperExceptionPage();
 
                 app.UseMigrationsEndPoint();
+
+                app.UseCors(this.AllowedOriginsCorsPolicy);
             }
 
             app.UseHealthChecks("/health");
